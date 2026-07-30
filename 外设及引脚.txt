@@ -1,0 +1,27 @@
+1. iic（软件）：EEPROM
+	B6：SCL
+	B7：SDA
+
+2. uart：屏幕驱动，bdr：115200
+	A9：TX
+	A10：RX
+
+3. timer：pwm generate，input cap
+	B5（TIM3 CH2）：TTL输出
+	A3（TIM5 CH4）：TTL输入，读取频率
+
+4. DAC：
+	A4：高压模块控制
+
+5. GPIO：
+	A5：继电器控制
+	C1：KEY0
+	C13：KEY1
+	C2：KEY2
+	C3：KEY3
+	C14：KEY4
+	C0：KEY5
+
+注：
+	PC14为外部低速晶振引脚，由于被占用，尽量不要焊接低速晶振
+	ADC模块暂未使用
