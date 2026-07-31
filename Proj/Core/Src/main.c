@@ -1,3 +1,13 @@
+/*
+ * @Author: Jiang Tianhang 1919524828@qq.com
+ * @Date: 2026-07-30 16:04:13
+ * @LastEditors: Jiang Tianhang 1919524828@qq.com
+ * @LastEditTime: 2026-07-31 09:42:03
+ * @FilePath: \code\Proj\Core\Src\main.c
+ * @Description: 
+ * 本项目只用于控制THz专用激励源的控制，切勿用于其他用途，否则西安理工大学及开发者不承担任何责任。
+ * Copyright (c) 2026 by ${git_name_email}, All Rights Reserved. 
+ */
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -27,7 +37,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "usr_main.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,7 +109,7 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-
+  Usr_Main_Init();
   /* USER CODE END 2 */
 
   /* Init scheduler */
