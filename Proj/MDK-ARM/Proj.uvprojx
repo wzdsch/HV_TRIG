@@ -614,6 +614,11 @@
               <FileType>1</FileType>
               <FilePath>..\Components\moudle\key_scan.c</FilePath>
             </File>
+            <File>
+              <FileName>realy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\moudle\realy.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
