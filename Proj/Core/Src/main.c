@@ -1,13 +1,3 @@
-/*
- * @Author: Jiang Tianhang 1919524828@qq.com
- * @Date: 2026-07-30 16:04:13
- * @LastEditors: Jiang Tianhang 1919524828@qq.com
- * @LastEditTime: 2026-07-31 09:42:03
- * @FilePath: \code\Proj\Core\Src\main.c
- * @Description: 
- * 本项目只用于控制THz专用激励源的控制，切勿用于其他用途，否则西安理工大学及开发者不承担任何责任。
- * Copyright (c) 2026 by ${git_name_email}, All Rights Reserved. 
- */
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -29,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "adc.h"
 #include "dac.h"
 #include "dma.h"
 #include "tim.h"
@@ -108,6 +99,7 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM5_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   Usr_Main_Init();
   /* USER CODE END 2 */
@@ -140,6 +132,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -167,6 +160,12 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
   }
