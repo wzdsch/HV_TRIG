@@ -2,8 +2,8 @@
  * @Author: Jiang Tianhang 1919524828@qq.com
  * @Date: 2026-08-01 11:02:58
  * @LastEditors: Jiang Tianhang 1919524828@qq.com
- * @LastEditTime: 2026-08-01 15:45:14
- * @FilePath: \code\Proj\Components\moudle\adc_sence.c
+ * @LastEditTime: 2026-08-03 10:41:57
+ * @FilePath: \code\Proj\Components\module\adc_sence.c
  * @Description: 
  * 本项目只用于控制THz专用激励源的控制，切勿用于其他用途，否则西安理工大学及开发者不承担任何责任。
  * Copyright (c) 2026 by Jiang Tianhang 1919524828@qq.com, All Rights Reserved. 
@@ -16,9 +16,7 @@
 
 static uint8_t adc_sence_flg = 0;
 
-#pragma pack(1)
-static uint16_t adc1_values[2];
-#pragma pack()
+volatile static uint16_t adc1_values[2];
 
 void ADC_Sence_Start() {
   HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc1_values, 2);
