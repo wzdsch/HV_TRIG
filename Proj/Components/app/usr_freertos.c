@@ -13,8 +13,10 @@
 #include "usr_tasks.h"
 #include "bsp_uart.h"
 #include "key_scan.h"
+#include "encoder.h"
 
 void Usr_FreeRTOS_Init(void) {
   BSP_UART_Init();
   Key_Init();
+  Encoder_Init();
 }

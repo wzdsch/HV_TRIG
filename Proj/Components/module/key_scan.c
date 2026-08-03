@@ -2,8 +2,8 @@
  * @Author: Jiang Tianhang 1919524828@qq.com
  * @Date: 2026-07-31 14:53:37
  * @LastEditors: Jiang Tianhang 1919524828@qq.com
- * @LastEditTime: 2026-07-31 16:10:09
- * @FilePath: \code\Proj\Components\moudle\key_scan.c
+ * @LastEditTime: 2026-08-03 10:22:37
+ * @FilePath: \code\Proj\Components\module\key_scan.c
  * @Description: 
  * 本项目只用于控制THz专用激励源的控制，切勿用于其他用途，否则西安理工大学及开发者不承担任何责任。
  * Copyright (c) 2026 by Jiang Tianhang 1919524828@qq.com, All Rights Reserved. 
@@ -34,20 +34,20 @@ uint8_t key5_crt_state = 1;
 
 // key action callback function, regist by extern
 // key pressed callback
-void (*Key0Down_Callback)(void) = NULL;
-void (*Key1Down_Callback)(void) = NULL;
-void (*Key2Down_Callback)(void) = NULL;
-void (*Key3Down_Callback)(void) = NULL;
-void (*Key4Down_Callback)(void) = NULL;
-void (*Key5Down_Callback)(void) = NULL;
+static void (*Key0Down_Callback)(void) = NULL;
+static void (*Key1Down_Callback)(void) = NULL;
+static void (*Key2Down_Callback)(void) = NULL;
+static void (*Key3Down_Callback)(void) = NULL;
+static void (*Key4Down_Callback)(void) = NULL;
+static void (*Key5Down_Callback)(void) = NULL;
 
 // key released callback
-void (*Key0Up_Callback)(void) = NULL;
-void (*Key1Up_Callback)(void) = NULL;
-void (*Key2Up_Callback)(void) = NULL;
-void (*Key3Up_Callback)(void) = NULL;
-void (*Key4Up_Callback)(void) = NULL;
-void (*Key5Up_Callback)(void) = NULL;
+static void (*Key0Up_Callback)(void) = NULL;
+static void (*Key1Up_Callback)(void) = NULL;
+static void (*Key2Up_Callback)(void) = NULL;
+static void (*Key3Up_Callback)(void) = NULL;
+static void (*Key4Up_Callback)(void) = NULL;
+static void (*Key5Up_Callback)(void) = NULL;
 
 // weather or not should run callback falg
 // key pressed flag

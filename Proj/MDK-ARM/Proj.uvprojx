@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Components/app;../Components/bsp;../Components/moudle;../Components/tools</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Components/app;../Components/bsp;..\Components\module;../Components/tools</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -775,27 +775,32 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>moudle</GroupName>
+          <GroupName>module</GroupName>
           <Files>
             <File>
-              <FileName>key_scan.c</FileName>
+              <FileName>adc_sence.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\moudle\key_scan.c</FilePath>
-            </File>
-            <File>
-              <FileName>realy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Components\moudle\realy.c</FilePath>
+              <FilePath>..\Components\module\adc_sence.c</FilePath>
             </File>
             <File>
               <FileName>dac_ctrl.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\moudle\dac_ctrl.c</FilePath>
+              <FilePath>..\Components\module\dac_ctrl.c</FilePath>
             </File>
             <File>
-              <FileName>adc_sence.c</FileName>
+              <FileName>encoder.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\moudle\adc_sence.c</FilePath>
+              <FilePath>..\Components\module\encoder.c</FilePath>
+            </File>
+            <File>
+              <FileName>key_scan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\module\key_scan.c</FilePath>
+            </File>
+            <File>
+              <FileName>realy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\module\realy.c</FilePath>
             </File>
           </Files>
         </Group>
