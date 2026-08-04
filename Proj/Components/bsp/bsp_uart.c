@@ -2,7 +2,7 @@
  * @Author: Jiang Tianhang 1919524828@qq.com
  * @Date: 2026-07-30 21:49:07
  * @LastEditors: Jiang Tianhang 1919524828@qq.com
- * @LastEditTime: 2026-07-31 14:47:50
+ * @LastEditTime: 2026-08-04 21:59:42
  * @FilePath: \code\Proj\Components\bsp\bsp_uart.c
  * @Description: 
  * 本项目只用于控制THz专用激励源的控制，切勿用于其他用途，否则西安理工大学及开发者不承担任何责任。
@@ -121,6 +121,7 @@ void BSP_UART_Task(void *argument) {
     // after transmit complete, free memory
     vPortFree(p_txmsg->p_data);
     vPortFree(p_txmsg);
+    osDelay(1);
   }
 }
 
