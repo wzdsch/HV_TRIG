@@ -2,7 +2,7 @@
  * @Author: Jiang Tianhang 1919524828@qq.com
  * @Date: 2026-07-30 21:49:07
  * @LastEditors: Jiang Tianhang 1919524828@qq.com
- * @LastEditTime: 2026-08-04 21:59:42
+ * @LastEditTime: 2026-08-05 22:36:37
  * @FilePath: \code\Proj\Components\bsp\bsp_uart.c
  * @Description: 
  * 本项目只用于控制THz专用激励源的控制，切勿用于其他用途，否则西安理工大学及开发者不承担任何责任。
@@ -15,16 +15,22 @@
 #include "freertos.h"
 #include "task.h"
 #include "string.h"
+#include "queue.h"
+#include "semphr.h"
 
 #pragma pack(1)
 
 /// @brief uart message transmitted by queue, only used in this moudle
 typedef struct {
-  uint8_t size;
+  uint16_t size;
   uint8_t* p_data;
 } BSP_UART_TxMsg_t;
 
 #pragma pack()
+
+// receive buffer
+#define UART_RX_BUF_SIZE 256
+uint8_t uart_rx_buf[UART_RX_BUF_SIZE];
 
 // task
 osThreadId_t bsp_uart_task;
@@ -37,22 +43,39 @@ osThreadAttr_t bsp_uart_task_attributes = {
 // uart message queue
 osMessageQueueId_t uart_queue;
 
-void BSP_UART_Task(void *argument);
+QueueHandle_t uart_queue_handle;
+
+/* OK应答信号量：屏幕回复"OK\r\n"后释放，BSP_UART_Task 据此流控 */
+static SemaphoreHandle_t uart_ok_sem = NULL;
+static uint32_t          uart_ok_timeout_ms = 100;
+
+void (*BSP_UART_ReceiveToIdleCallback)(uint16_t Size) = NULL;
+
+extern void BSP_UART_Task(void *argument);
 
 void BSP_UART_Init(void) {
   // create uart queue
   uart_queue = osMessageQueueNew(10, sizeof(BSP_UART_TxMsg_t*), NULL);
-
+  uart_queue_handle = (QueueHandle_t)uart_queue;
   // create uart task
   bsp_uart_task = osThreadNew(BSP_UART_Task, NULL, &bsp_uart_task_attributes);
 
   // clear task state
   xTaskNotifyStateClear((TaskHandle_t)bsp_uart_task);
   ulTaskNotifyValueClear((TaskHandle_t)bsp_uart_task, 0xFFFFFFFF);
+
+  // create OK semaphore (binary, initial 0)
+  uart_ok_sem = xSemaphoreCreateBinary();
+
+  // start uart receive to idle interrupt
+  HAL_UARTEx_ReceiveToIdle_IT(&huart1, uart_rx_buf, UART_RX_BUF_SIZE);
 }
 
+void BSP_UART_SetReceiveToIdleCallback(void (*callback)(uint16_t Size)) {
+  BSP_UART_ReceiveToIdleCallback = callback;
+}
 
-uint8_t BSP_UART_Transmit(uint8_t* p_data, uint8_t size) {
+uint8_t BSP_UART_Transmit(uint8_t* p_data, uint16_t size) {
   uint8_t malloc_err_flg = 0;
 
   // param error, return 1
@@ -111,17 +134,35 @@ void BSP_UART_Task(void *argument) {
 
     // get message from queue, transmit and wait for transmit complete notification
     osMessageQueueGet(uart_queue, &p_txmsg, NULL, osWaitForever);
-    if (HAL_UART_Transmit_DMA(&huart1, p_txmsg->p_data, p_txmsg->size) != HAL_OK) {
-            vPortFree(p_txmsg->p_data);
-            vPortFree(p_txmsg);
-            continue;
-        }
-    if (ulTaskNotifyTake(pdTRUE, 1000))
+    while(HAL_UART_Transmit_DMA(&huart1, p_txmsg->p_data, p_txmsg->size) != HAL_OK);
+    ulTaskNotifyTake(pdTRUE, 1000);
+
+    // wait for screen "OK\r\n" response, timeout to avoid deadlock
+    if (xSemaphoreTake(uart_ok_sem, pdMS_TO_TICKS(uart_ok_timeout_ms)) != pdTRUE) {
+      // timeout: screen didn't respond, continue anyway
+    }
 
     // after transmit complete, free memory
     vPortFree(p_txmsg->p_data);
     vPortFree(p_txmsg);
-    osDelay(1);
+  }
+}
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
+  if(huart->Instance == USART1) {
+    // check for "OK\r\n" at the end of received data
+    if (Size >= 4) {
+      uint8_t *tail = &uart_rx_buf[Size - 4];
+      if (tail[0] == 'O' && tail[1] == 'K' && tail[2] == '\r' && tail[3] == '\n') {
+        BaseType_t yield_flg = pdFALSE;
+        xSemaphoreGiveFromISR(uart_ok_sem, &yield_flg);
+        if (yield_flg == pdTRUE) {
+          portYIELD_FROM_ISR(yield_flg);
+        }
+      }
+    }
+    // restart RX
+    HAL_UARTEx_ReceiveToIdle_IT(&huart1, uart_rx_buf, UART_RX_BUF_SIZE);
   }
 }
 
