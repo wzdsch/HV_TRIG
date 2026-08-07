@@ -2,7 +2,7 @@
  * @Author: Jiang Tianhang 1919524828@qq.com
  * @Date: 2026-07-30 21:49:07
  * @LastEditors: Jiang Tianhang 1919524828@qq.com
- * @LastEditTime: 2026-08-05 22:36:37
+ * @LastEditTime: 2026-08-06 10:18:52
  * @FilePath: \code\Proj\Components\bsp\bsp_uart.c
  * @Description: 
  * 本项目只用于控制THz专用激励源的控制，切勿用于其他用途，否则西安理工大学及开发者不承担任何责任。
@@ -47,7 +47,6 @@ QueueHandle_t uart_queue_handle;
 
 /* OK应答信号量：屏幕回复"OK\r\n"后释放，BSP_UART_Task 据此流控 */
 static SemaphoreHandle_t uart_ok_sem = NULL;
-static uint32_t          uart_ok_timeout_ms = 100;
 
 void (*BSP_UART_ReceiveToIdleCallback)(uint16_t Size) = NULL;
 
@@ -55,7 +54,7 @@ extern void BSP_UART_Task(void *argument);
 
 void BSP_UART_Init(void) {
   // create uart queue
-  uart_queue = osMessageQueueNew(10, sizeof(BSP_UART_TxMsg_t*), NULL);
+  uart_queue = osMessageQueueNew(20, sizeof(BSP_UART_TxMsg_t*), NULL);
   uart_queue_handle = (QueueHandle_t)uart_queue;
   // create uart task
   bsp_uart_task = osThreadNew(BSP_UART_Task, NULL, &bsp_uart_task_attributes);
@@ -138,7 +137,7 @@ void BSP_UART_Task(void *argument) {
     ulTaskNotifyTake(pdTRUE, 1000);
 
     // wait for screen "OK\r\n" response, timeout to avoid deadlock
-    if (xSemaphoreTake(uart_ok_sem, pdMS_TO_TICKS(uart_ok_timeout_ms)) != pdTRUE) {
+    if (xSemaphoreTake(uart_ok_sem, pdMS_TO_TICKS(200)) != pdTRUE) {
       // timeout: screen didn't respond, continue anyway
     }
 

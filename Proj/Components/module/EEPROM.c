@@ -2,7 +2,7 @@
  * @Author: Jiang Tianhang 1919524828@qq.com
  * @Date: 2026-08-04 16:40:00
  * @LastEditors: Jiang Tianhang 1919524828@qq.com
- * @LastEditTime: 2026-08-04 17:03:23
+ * @LastEditTime: 2026-08-06 17:23:59
  * @FilePath: \code\Proj\Components\module\EEPROM.c
  * @Description:
  *  AT24C02 EEPROM 读写模块，使用硬件 I2C1（PB6=SCL，PB7=SDA）
@@ -70,9 +70,9 @@ uint8_t EEPROM_Write(uint16_t addr, uint8_t *buf, uint16_t len) {
 static uint8_t EEPROM_SavePreset(uint16_t addr, const Display_PresetData_t *preset) {
   if (EEPROM_WriteByte(addr, (uint8_t)(preset->voltage & 0xFF)) != 0) return 1;
   if (EEPROM_WriteByte(addr + 1, (uint8_t)(preset->voltage >> 8)) != 0) return 1;
-  if (EEPROM_WriteByte(addr + 2, (uint8_t)(preset->frequency & 0xFF)) != 0) return 1;
-  if (EEPROM_WriteByte(addr + 3, (uint8_t)(preset->frequency >> 8)) != 0) return 1;
-  if (EEPROM_WriteByte(addr + 4, preset->duty_cycle) != 0) return 1;
+  if (EEPROM_WriteByte(addr + 2, (uint8_t)(preset->freq & 0xFF)) != 0) return 1;
+  if (EEPROM_WriteByte(addr + 3, (uint8_t)(preset->freq >> 8)) != 0) return 1;
+  if (EEPROM_WriteByte(addr + 4, preset->duty) != 0) return 1;
   return 0;
 }
 
@@ -86,13 +86,13 @@ static uint8_t EEPROM_LoadPreset(uint16_t addr, Display_PresetData_t *preset) {
     return 1;
   }
   preset->voltage    = buf[0] | (buf[1] << 8);
-  preset->frequency  = buf[2] | (buf[3] << 8);
-  preset->duty_cycle = buf[4];
+  preset->freq  = buf[2] | (buf[3] << 8);
+  preset->duty = buf[4];
 
   // 防止 EEPROM 内容异常导致越界
   if (preset->voltage > EEPROM_VOLTAGE_MAX) preset->voltage = EEPROM_VOLTAGE_MAX;
-  if (preset->frequency > EEPROM_FREQ_MAX) preset->frequency = EEPROM_FREQ_MAX;
-  if (preset->duty_cycle > EEPROM_DUTY_MAX) preset->duty_cycle = EEPROM_DUTY_MAX;
+  if (preset->freq > EEPROM_FREQ_MAX) preset->freq = EEPROM_FREQ_MAX;
+  if (preset->duty > EEPROM_DUTY_MAX) preset->duty = EEPROM_DUTY_MAX;
   return 0;
 }
 
