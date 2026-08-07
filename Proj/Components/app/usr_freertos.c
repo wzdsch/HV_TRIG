@@ -14,6 +14,7 @@
 #include "bsp_uart.h"
 #include "key_scan.h"
 #include "encoder.h"
+#include "EEPROM.h"
 
 void Main_Task(void *argument);
 
@@ -28,4 +29,5 @@ void Usr_FreeRTOS_Init(void) {
   BSP_UART_Init();
   Key_Init();
   Encoder_Init();
+  EEPROM_Init();
 }

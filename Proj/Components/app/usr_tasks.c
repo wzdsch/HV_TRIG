@@ -2,7 +2,7 @@
  * @Author: Jiang Tianhang 1919524828@qq.com
  * @Date: 2026-07-30 17:22:02
  * @LastEditors: Jiang Tianhang 1919524828@qq.com
- * @LastEditTime: 2026-08-07 11:43:40
+ * @LastEditTime: 2026-08-07 19:29:40
  * @FilePath: \code\Proj\Components\app\usr_tasks.c
  * @Description: 
  * 本项目只用于控制THz专用激励源的控制，切勿用于其他用途，否则西安理工大学及开发者不承担任何责任。
@@ -37,23 +37,25 @@ Display_MainData_t g_main_data = {
 };
 Display_SettingsData_t g_settings_data = {
   .default_preset = {
-    .voltage = 0,
-    .freq = 0,
-    .duty = 0
+    .voltage = 12,
+    .freq = 123,
+    .duty = 23
   },
   .preset1 = {
-    .voltage = 0,
-    .duty = 0,
-    .freq = 0
+    .voltage = 345,
+    .freq = 456,
+    .duty = 56
   },
   .preset2 = {
-    .voltage = 0,
-    .duty = 0,
-    .freq = 0
+    .voltage = 678,
+    .freq = 789,
+    .duty = 89
   }
 };
 
 void Main_Task(void *argument) {
+	EEPROM_SaveSettings(&g_settings_data);
+  EEPROM_LoadSettings(&g_settings_data);
   Display_Init(&g_display_state, &g_display_out_state ,&g_cursor, &g_main_data, \
                &g_settings_row, &g_settings_data);
   // Display_ShowMain_Bg();
