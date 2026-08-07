@@ -14,4 +14,12 @@
 #include "stdint.h"
 #include "display.h"
 
+void Key0_Down_Logic(void);
+void Key1_Down_Logic(void);
+void Key2_Down_Logic(void);
+void Key3_Down_Logic(void);
+void Key4_Down_Logic(void);
+void Key5_Down_Logic(void);
+void Encoder_Logic(int32_t delta);
+
 #endif

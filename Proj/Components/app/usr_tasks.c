@@ -2,7 +2,7 @@
  * @Author: Jiang Tianhang 1919524828@qq.com
  * @Date: 2026-07-30 17:22:02
  * @LastEditors: Jiang Tianhang 1919524828@qq.com
- * @LastEditTime: 2026-08-07 19:29:40
+ * @LastEditTime: 2026-08-07 22:16:00
  * @FilePath: \code\Proj\Components\app\usr_tasks.c
  * @Description: 
  * 本项目只用于控制THz专用激励源的控制，切勿用于其他用途，否则西安理工大学及开发者不承担任何责任。
@@ -20,6 +20,8 @@
 #include "bsp_uart.h"
 #include <string.h>
 #include "display.h"
+#include "key_scan.h"
+#include "encoder.h"
 
 Display_State_e g_display_state = DISPLAY_STATE_MAIN;
 Display_OutState_e g_display_out_state = DISPLAY_OUTSTATE_OFF;
@@ -58,26 +60,14 @@ void Main_Task(void *argument) {
   EEPROM_LoadSettings(&g_settings_data);
   Display_Init(&g_display_state, &g_display_out_state ,&g_cursor, &g_main_data, \
                &g_settings_row, &g_settings_data);
-  // Display_ShowMain_Bg();
-  // for(;;) {
-  //   uint32_t start_tick = osKernelGetTickCount();
-
-  //   Display_ShowMain_Measured();
-  //   Display_Show_CornerValues();
-	// 	Display_ShowMain_OutState();
-
-  //   osDelayUntil(start_tick + 200);
-  // }
-  // Display_ShowSettings_Bg();
+  Key_SetKey0DownCallback(Key0_Down_Logic);
+  Key_SetKey1DownCallback(Key1_Down_Logic);
+  Key_SetKey2DownCallback(Key2_Down_Logic);
+  Key_SetKey3DownCallback(Key3_Down_Logic);
+  Key_SetKey4DownCallback(Key4_Down_Logic);
+  Key_SetKey5DownCallback(Key5_Down_Logic);
+  Encoder_SetCallback(Encoder_Logic);
+  Encoder_Start();
   for(;;) {
-    // uint32_t start_tick = osKernelGetTickCount();
-
-    // Display_Show_CornerValues();
-
-    // Display_ShowSettings_PresetGroup(DISPLAY_SETTINGS_ROW_DEFAULT);
-    // Display_ShowSettings_PresetGroup(DISPLAY_SETTINGS_ROW_PRESET1);
-    // Display_ShowSettings_PresetGroup(DISPLAY_SETTINGS_ROW_PRESET2);
-
-    // osDelay(200);
   }
 }

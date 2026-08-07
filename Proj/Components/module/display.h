@@ -2,7 +2,7 @@
  * @Author: Jiang Tianhang 1919524828@qq.com
  * @Date: 2026-08-04 09:34:20
  * @LastEditors: Jiang Tianhang 1919524828@qq.com
- * @LastEditTime: 2026-08-07 11:42:32
+ * @LastEditTime: 2026-08-07 21:32:22
  * @FilePath: \code\Proj\Components\module\display.h
  * @Description: MF022 UART串口屏显示模块
  *  屏幕分辨率: 220x176
@@ -92,4 +92,4 @@ void Display_Init(  const Display_State_e* gp_display_state,              \
                     const Display_SettingsRow_e* gp_display_settings_row, \
                     const Display_SettingsData_t* gp_display_settings_data
                   );
-#endif // DISPLAY_H
+#endif
